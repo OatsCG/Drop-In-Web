@@ -20,12 +20,8 @@ struct SportChip: View {
             categoryParser.updateDisplayEvents(maxDays: 14)
         }) {
             HStack {
-                if #available(iOS 17.0, *) {
-                    Image(systemName: category.symbol)
-                        .symbolEffect(.bounce, value: category.selected)
-                } else {
-                    Image(category.symbol)
-                }
+                Image(systemName: category.symbol)
+                    .symbolEffect(.bounce, value: category.selected)
                 Text(category.title)
                     .fixedSize(horizontal: false, vertical: true)
                 if favourited {

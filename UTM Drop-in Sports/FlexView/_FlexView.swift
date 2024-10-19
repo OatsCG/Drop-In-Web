@@ -49,13 +49,13 @@ struct _FlexView<Data: Collection & Equatable, Content: View>: View where Data.E
             .allowsHitTesting(false)
         }
         
-        .onChange(of: availableWidth) { _ in
+        .onChange(of: availableWidth) {
             computeRows(maxRows: self.maxRows, animate: false)
         }
-        .onChange(of: maxRows) { _ in
+        .onChange(of: maxRows) {
             computeRows(maxRows: self.maxRows, animate: true)
         }
-        .onChange(of: data) { _ in
+        .onChange(of: data) {
             computeRows(maxRows: self.maxRows, animate: false)
         }
     }

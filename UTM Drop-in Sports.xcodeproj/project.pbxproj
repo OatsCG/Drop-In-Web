@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		E53560AD2CB78B1600D334C5 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = E53560AC2CB78B1600D334C5 /* ConfettiSwiftUI */; };
-		E57085B82CAAF9FF00CE03AE /* Intent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57085B72CAAF9FF00CE03AE /* Intent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,7 +28,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		E57085B72CAAF9FF00CE03AE /* Intent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Intent.swift; sourceTree = "<group>"; };
 		E5FF24342C8964B500AFCCE9 /* UTM Drop-in Sports.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "UTM Drop-in Sports.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5FF24452C8964B700AFCCE9 /* UTM Drop-in SportsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "UTM Drop-in SportsTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5FF244F2C8964B700AFCCE9 /* UTM Drop-in SportsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "UTM Drop-in SportsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -82,7 +80,6 @@
 		E5FF242B2C8964B500AFCCE9 = {
 			isa = PBXGroup;
 			children = (
-				E57085B72CAAF9FF00CE03AE /* Intent.swift */,
 				E5FF24362C8964B500AFCCE9 /* UTM Drop-in Sports */,
 				E5FF24482C8964B700AFCCE9 /* UTM Drop-in SportsTests */,
 				E5FF24522C8964B700AFCCE9 /* UTM Drop-in SportsUITests */,
@@ -248,7 +245,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E57085B82CAAF9FF00CE03AE /* Intent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -423,7 +419,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
@@ -467,7 +463,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.0;

@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import AppIntents
 
 struct ContentView: View {
     @Environment(\.scenePhase) var scenePhase
@@ -15,24 +14,16 @@ struct ContentView: View {
     @State var showNetworkAlert: Bool = false
     var body: some View {
         Group {
-            if #available(iOS 16.0, *) {
-                MainNavigationView(showNetworkAlert: $showNetworkAlert)
-            } else {
-                MainNavigationViewLegacy(showNetworkAlert: $showNetworkAlert)
-            }
+            MainNavigationView(showNetworkAlert: $showNetworkAlert)
         }
         .searchable(text: $searchField)
-        .onChange(of: searchField) { _ in
+        .onChange(of: searchField) {
             categoryParser.searchField = searchField
             categoryParser.updateDisplayEvents(maxDays: 14)
         }
         .onAppear {
             Task {
-                if #available(iOS 16.0, *) {
-                    try? await Task.sleep(for: .seconds(5))
-                } else {
-                    try? await Task.sleep(nanoseconds: 5_000_000_000)
-                }
+                try? await Task.sleep(for: .seconds(5))
                 await MainActor.run {
                     if (categoryParser.isUpdating) {
                         withAnimation {
@@ -45,35 +36,16 @@ struct ContentView: View {
     }
 }
 
-@available(iOS 16.0, *)
 struct MainNavigationView: View {
     @State var path: NavigationPath = NavigationPath()
     @Binding var showNetworkAlert: Bool
 
     var body: some View {
         NavigationStack(path: $path) {
-            if #available(iOS 17.0, *) {
-                MainScrollView(showNetworkAlert: $showNetworkAlert)
-                    .navigationTitle(Text("UTM Drop-Ins"))
-                    .safeAreaPadding(.horizontal)
-            } else {
-                MainScrollView(showNetworkAlert: $showNetworkAlert)
-                    .navigationTitle(Text("UTM Drop-Ins"))
-            }
-        }
-    }
-}
-
-
-@available(iOS 15.0, *)
-struct MainNavigationViewLegacy: View {
-    @Binding var showNetworkAlert: Bool
-    var body: some View {
-        NavigationView {
             MainScrollView(showNetworkAlert: $showNetworkAlert)
                 .navigationTitle(Text("UTM Drop-Ins"))
+                .safeAreaPadding(.horizontal)
         }
-        .navigationViewStyle(.stack)
     }
 }
 
@@ -84,12 +56,7 @@ struct MainScrollView: View {
     @Binding var showNetworkAlert: Bool
     var body: some View {
         ScrollView {
-            if #available(iOS 17.0, *) {
-                MainScrollContentView(showNetworkAlert: $showNetworkAlert)
-            } else {
-                MainScrollContentView(showNetworkAlert: $showNetworkAlert)
-                    .padding(.horizontal)
-            }
+            MainScrollContentView(showNetworkAlert: $showNetworkAlert)
         }
     }
 }
@@ -150,9 +117,3 @@ struct LoadMoreEventsButton: View {
 }
 
 
-
-//#Preview {
-//    @State var c = CategoryParser()
-//    return ContentView()
-//        .environmentObject(c)
-//}

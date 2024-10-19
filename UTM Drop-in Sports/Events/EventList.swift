@@ -37,21 +37,13 @@ struct EventDaySection: View {
     @Binding var day: DayEvents
     @State var isExpanded: Bool = true
     var body: some View {
-        if #available(iOS 17.0, *) {
-            Section(isExpanded: $isExpanded) {
-                ForEach($day.events, id: \.id) { $event in
-                    EventCard(event: $event)
-                        .transition(.blurReplace)
-                }
-            } header: {
-                EventDayHeader(isExpanded: $isExpanded, day: day)
+        Section(isExpanded: $isExpanded) {
+            ForEach($day.events, id: \.id) { $event in
+                EventCard(event: $event)
+                    .transition(.blurReplace)
             }
-        } else {
-            Section(header: EventDayHeader(isExpanded: $isExpanded, day: day)) {
-                ForEach($day.events, id: \.id) { $event in
-                    EventCard(event: $event)
-                }
-            }
+        } header: {
+            EventDayHeader(isExpanded: $isExpanded, day: day)
         }
     }
 }
@@ -72,11 +64,9 @@ struct EventDayHeader: View {
                             Text(relativeDateString(day.date))
                                 .font(.title.bold())
                             Spacer()
-                            if #available(iOS 17.0, *) {
-                                Image(systemName: isExpanded ? "chevron.up.circle" : "chevron.down.circle")
-                                    .font(.title2)
-                                    .foregroundStyle(.secondary)
-                            }
+                            Image(systemName: isExpanded ? "chevron.up.circle" : "chevron.down.circle")
+                                .font(.title2)
+                                .foregroundStyle(.secondary)
                         }
                         .contentShape(Rectangle())
                     }
@@ -95,13 +85,8 @@ struct EventDayHeader: View {
         }
         .background {
             Group {
-                if #available(iOS 17.0, *) {
-                    Rectangle()
-                        .strokeBorder(.quinary, lineWidth: 1)
-                } else {
-                    Rectangle()
-                        .strokeBorder(.clear, lineWidth: 1)
-                }
+                Rectangle()
+                    .strokeBorder(.quinary, lineWidth: 1)
             }
                 .background(Rectangle().fill(.background))
                 .ignoresSafeArea()

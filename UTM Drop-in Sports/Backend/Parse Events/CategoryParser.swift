@@ -30,10 +30,6 @@ class CategoryParser: ObservableObject {
         self.tryRefreshContent()
     }
     
-    init() async {
-        await self.tryRefreshContentAsync()
-    }
-    
     func tryRefreshContent() {
         if let lastUpdated = self.lastUpdated {
             if areDatesWithinTenMinutes(Date(), lastUpdated) {
@@ -61,27 +57,6 @@ class CategoryParser: ObservableObject {
                     self.startTimerLoop()
                 }
             }
-        }
-    }
-    
-    func tryRefreshContentAsync() async {
-        if let lastUpdated = self.lastUpdated {
-            if areDatesWithinTenMinutes(Date(), lastUpdated) {
-                return
-            }
-        }
-        if self.isUpdatingPrivate {
-            return
-        }
-        self.isUpdatingPrivate = true
-        await self.eventFileFetcher()
-        let eventJSON: EventJSON? = loadEventJSON()
-        if let eventJSON = eventJSON {
-            self.categories = eventJSON.categories
-            self.allEvents = eventJSON.events
-            self.lastUpdated = Date()
-            self.updateDisplayEvents(maxDays: 14)
-            self.isUpdatingPrivate = false
         }
     }
     

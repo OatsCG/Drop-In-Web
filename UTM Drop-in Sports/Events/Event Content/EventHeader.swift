@@ -11,13 +11,8 @@ struct EventHeader: View {
     var event: Event
     var body: some View {
         HStack(alignment: .center) {
-            if #available (iOS 17.0, *) {
-                Image(systemName: event.symbol)
-                    .font(.largeTitle)
-            } else {
-                Image(event.symbol)
-                    .font(.largeTitle)
-            }
+            Image(systemName: event.symbol)
+                .font(.largeTitle)
             Text(event.title)
                 .font(.title .bold())
             Spacer()
@@ -39,25 +34,15 @@ struct EventHeader: View {
             HStack(alignment: .top) {
                 VStack(alignment: .leading) {
                     HStack {
-                        if #available(iOS 16.0, *) {
-                            Image(systemName: event.relativeTimeDate.daySymbol)
-                                .foregroundStyle(event.relativeTimeDate.daySymbolColor.gradient)
-                        } else {
-                            Image(systemName: event.relativeTimeDate.daySymbol)
-                                .foregroundStyle(event.relativeTimeDate.daySymbolColor)
-                        }
+                        Image(systemName: event.relativeTimeDate.daySymbol)
+                            .foregroundStyle(event.relativeTimeDate.daySymbolColor.gradient)
                         Text(event.relativeTimeDate.timeString)
                     }
                     if event.relativeTimeDate.isOngoing {
                         HStack {
-                            if #available(iOS 18.0, *) {
-                                Image(systemName: "record.circle")
-                                    .font(.caption2)
-                                    .symbolEffect(.pulse .byLayer, options: .repeat(.continuous))
-                            } else {
-                                Image(systemName: "record.circle")
-                                    .font(.caption2)
-                            }
+                            Image(systemName: "record.circle")
+                                .font(.caption2)
+                                .symbolEffect(.pulse .byLayer, options: .repeat(.continuous))
                             Text("Ongoing")
                         }
                         .foregroundStyle(.green)
