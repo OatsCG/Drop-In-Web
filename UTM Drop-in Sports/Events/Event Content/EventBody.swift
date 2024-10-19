@@ -13,46 +13,6 @@ struct EventBody: View {
     var body: some View {
         Text(event.description)
             .padding(.bottom, 10)
-        
-        if event.saved {
-            Button(action: {
-                categoryParser.unsaveEvent(event: event)
-            }) {
-                VStack(alignment: .center) {
-                    HStack {
-                        Text("Event Saved")
-                        Image(systemName: "bookmark.fill")
-                    }
-                    Text("Have Fun!")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                }
-                    .foregroundStyle(.white)
-                    .multilineTextAlignment(.center)
-                    .padding(.vertical, 6)
-                    .padding(.horizontal, 12)
-                    .background(.blueUTMdark)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-            }
-            .padding(.bottom, 30)
-        } else {
-            Button(action: {
-                categoryParser.saveEvent(event: event)
-            }) {
-                HStack {
-                    Text("Save This Event")
-                    Image(systemName: "bookmark")
-                }
-                    .foregroundStyle(.black)
-                    .padding(.vertical, 6)
-                    .padding(.horizontal, 12)
-                    .background(.blueUTMlight)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-            }
-            .padding(.bottom, 30)
-        }
-        
-        
         HStack {
             if let url = URL(string: event.url) {
                 Link(destination: url) {

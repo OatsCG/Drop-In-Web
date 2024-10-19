@@ -13,7 +13,6 @@ class CategoryParser: ObservableObject {
     @Published var categories: [Category] = []
     
     @Published var events: [Event] = []
-    @Published var savedEvents: [Event] = []
     @Published var savedOngoingEvents: [Event] = []
     @Published var groupedEvents: AllEvents = AllEvents(events: [], maxDays: nil)
     
@@ -59,7 +58,6 @@ class CategoryParser: ObservableObject {
                     }
                     self.allEvents = eventJSON.events
                     self.lastUpdated = Date()
-                    self.updateSavedEvents()
                     self.updateDisplayEvents(maxDays: 14)
                     self.isUpdatingPrivate = false
                     self.startTimerLoop()
@@ -84,7 +82,6 @@ class CategoryParser: ObservableObject {
             self.categories = eventJSON.categories
             self.allEvents = eventJSON.events
             self.lastUpdated = Date()
-            self.updateSavedEvents()
             self.updateDisplayEvents(maxDays: 14)
             self.isUpdatingPrivate = false
         }
@@ -177,8 +174,7 @@ class CategoryParser: ObservableObject {
     
     func updateDisplayEvents(maxDays: Int?) {
         let notOverEvents: [Event] = self.allEvents.filter { $0.relativeTimeDate.isEventOver == false }
-        let savedRespectedEvents: [Event] = self.onlySaved ? self.savedEvents : notOverEvents
-        let womensRespectedEvents: [Event] = savedRespectedEvents.filter { !self.onlyWomens || $0.womens }
+        let womensRespectedEvents: [Event] = notOverEvents.filter { !self.onlyWomens || $0.womens }
         var searchedEvents: [Event] = []
         for event in womensRespectedEvents {
             if event.title.lowercased().contains(self.searchField.lowercased()) ||
@@ -221,54 +217,6 @@ class CategoryParser: ObservableObject {
                 self.groupedEvents = AllEvents(events: self.events, maxDays: nil)
                 self.isEventsExpandedToMax = true
             }
-        }
-    }
-    
-    func saveEvent(event: Event) {
-        // save the event. when app is launched after saved time, show Award sheet.
-        //UserDefaults.
-        // get userDefaults SavedEventIDs
-        let savedEventIDs: String = UserDefaults.standard.string(forKey: "SavedEventIDs") ?? ""
-        // split via <SEP> -> [String] of event ids
-        var splitSavedEventIDs: [String] = savedEventIDs.components(separatedBy: "<SEP>")
-        // remove event.id
-        splitSavedEventIDs.removeAll(where: { $0 == String(event.id) })
-        // append event.id
-        splitSavedEventIDs.append(String(event.id))
-        // combine with <SEP>
-        let combinedSavedEventIDs: String = splitSavedEventIDs.joined(separator: "<SEP>")
-        // save to userDefaults SavedEventIDs
-        UserDefaults.standard.set(combinedSavedEventIDs, forKey: "SavedEventIDs")
-        
-        self.updateSavedEvents()
-    }
-    
-    func unsaveEvent(event: Event) {
-        // save the event. when app is launched after saved time, show Award sheet.
-        let savedEventIDs: String = UserDefaults.standard.string(forKey: "SavedEventIDs") ?? ""
-        var splitSavedEventIDs: [String] = savedEventIDs.components(separatedBy: "<SEP>")
-        splitSavedEventIDs.removeAll(where: { $0 == String(event.id) })
-        event.saved = false
-        let combinedSavedEventIDs: String = splitSavedEventIDs.joined(separator: "<SEP>")
-        // save to userDefaults SavedEventIDs
-        UserDefaults.standard.set(combinedSavedEventIDs, forKey: "SavedEventIDs")
-        
-        self.updateSavedEvents()
-    }
-    
-    func updateSavedEvents() {
-        let savedEventIDs: String = UserDefaults.standard.string(forKey: "SavedEventIDs") ?? ""
-        let splitSavedEventIDs: [String] = savedEventIDs.components(separatedBy: "<SEP>")
-        var matchingEvents: [Event] = []
-        for savedEventID in splitSavedEventIDs {
-            if let matchingEvent = self.allEvents.first(where: { $0.id == Int(savedEventID) }) {
-                matchingEvent.saved = true
-                matchingEvents.append(matchingEvent)
-            }
-        }
-        withAnimation {
-            self.savedEvents = matchingEvents
-            self.savedOngoingEvents = matchingEvents.filter { $0.relativeTimeDate.isOngoing || $0.relativeTimeDate.isEventOver }
         }
     }
 }

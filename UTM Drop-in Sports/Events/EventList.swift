@@ -25,7 +25,6 @@ struct EventList: View {
             
         } else {
             LazyVStack(alignment: .leading, pinnedViews: [.sectionHeaders]) {
-                SavedEvents()
                 ForEach($categoryParser.groupedEvents.days, id: \.date) { $day in
                     EventDaySection(day: $day)
                 }
