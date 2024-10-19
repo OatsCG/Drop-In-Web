@@ -13,12 +13,10 @@ class CategoryParser: ObservableObject {
     @Published var categories: [Category] = []
     
     @Published var events: [Event] = []
-    @Published var savedOngoingEvents: [Event] = []
     @Published var groupedEvents: AllEvents = AllEvents(events: [], maxDays: nil)
     
     @Published var isUpdating: Bool = true
     @Published var onlyWomens: Bool = false
-    @Published var onlySaved: Bool = false
     
     @Published var isEventsExpandedToMax: Bool = false
     

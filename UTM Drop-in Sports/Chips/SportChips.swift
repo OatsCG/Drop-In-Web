@@ -78,62 +78,6 @@ struct SportChips: View {
                             }
                         }
                             .buttonStyle(.plain)
-                        
-                        Button(action: {
-                            withAnimation(.interactiveSpring) {
-                                categoryParser.onlySaved.toggle()
-                            }
-                            categoryParser.updateDisplayEvents(maxDays: 14)
-                        }) {
-                            HStack {
-                                Text("Saved")
-                                if #available(iOS 17.0, *) {
-                                    Image(systemName: categoryParser.onlySaved ? "bookmark.fill" : "bookmark")
-                                        .contentTransition(.symbolEffect(.replace.offUp))
-                                } else {
-                                    Image(systemName: categoryParser.onlySaved ? "bookmark.fill" : "bookmark")
-                                }
-                            }
-                            .foregroundStyle(categoryParser.onlySaved ? .black : (colorScheme == .dark ? .white : .black))
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 8)
-                            .background {
-                                if colorScheme == .dark {
-                                    if categoryParser.onlySaved {
-                                        if #available(iOS 16.0, *) {
-                                            RoundedRectangle(cornerRadius: 8)
-                                                .strokeBorder(.blueUTMlight, lineWidth: 2)
-                                                .background(RoundedRectangle(cornerRadius: 8).fill(.blueUTMlight.gradient))
-                                        } else {
-                                            RoundedRectangle(cornerRadius: 8)
-                                                .strokeBorder(.blueUTMlight, lineWidth: 2)
-                                                .background(RoundedRectangle(cornerRadius: 8).fill(.blueUTMlight))
-                                        }
-                                    } else {
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .strokeBorder(.blueUTMlight, lineWidth: 1)
-                                            .background(RoundedRectangle(cornerRadius: 8).fill(.white.opacity(0.05)))
-                                    }
-                                } else {
-                                    if categoryParser.onlySaved {
-                                        if #available(iOS 16.0, *) {
-                                            RoundedRectangle(cornerRadius: 8)
-                                                .strokeBorder(.blueUTMlight, lineWidth: 2)
-                                                .background(RoundedRectangle(cornerRadius: 8).fill(.blueUTMlight.gradient))
-                                        } else {
-                                            RoundedRectangle(cornerRadius: 8)
-                                                .strokeBorder(.blueUTMlight, lineWidth: 2)
-                                                .background(RoundedRectangle(cornerRadius: 8).fill(.blueUTMlight))
-                                        }
-                                    } else {
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .strokeBorder(.blueUTMlight, lineWidth: 2)
-                                            .background(RoundedRectangle(cornerRadius: 8).fill(.white))
-                                    }
-                                }
-                            }
-                        }
-                            .buttonStyle(.plain)
                         Spacer()
                     }
                 }
@@ -167,10 +111,6 @@ struct SportChips: View {
                                 }
                                 if (categoryParser.onlyWomens) {
                                     Image("figure.stand.dress")
-                                        .foregroundStyle(.blueUTM)
-                                }
-                                if (categoryParser.onlySaved) {
-                                    Image(systemName: "bookmark.fill")
                                         .foregroundStyle(.blueUTM)
                                 }
                             }
