@@ -1,5 +1,5 @@
 //
-//  EventHeader.swift
+//  EventContentHeader.swift
 //  UTM Drop-in Sports
 //
 //  Created by Charlie Giannis on 2024-09-08.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EventHeader: View {
+struct EventContentHeader: View {
     var event: Event
     
     var body: some View {

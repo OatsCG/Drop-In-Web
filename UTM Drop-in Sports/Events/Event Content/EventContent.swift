@@ -25,12 +25,12 @@ struct EventContent: View {
             
             ScrollView {
                 VStack {
-                    EventImage(event: event)
+                    EventContentImage(event: event)
                         .padding(.bottom, 18)
-                    EventHeader(event: event)
+                    EventContentHeader(event: event)
                     Divider()
                         .padding(.vertical, 15)
-                    EventBody(event: event)
+                    EventContentBody(event: event)
                 }
                 .padding(.bottom, 50)
                 .safeAreaPadding()

@@ -127,7 +127,6 @@ class CategoryParser: ObservableObject {
             print("Error fetching data: \(error)")
         }
     }
-
     
     func updateDisplayEvents(maxDays: Int?) {
         let notOverEvents: [Event] = self.allEvents.filter { $0.relativeTimeDate.isEventOver == false }

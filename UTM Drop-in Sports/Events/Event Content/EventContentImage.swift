@@ -1,5 +1,5 @@
 //
-//  EventImage.swift
+//  EventContentImage.swift
 //  UTM Drop-in Sports
 //
 //  Created by Charlie Giannis on 2024-09-08.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EventImage: View {
+struct EventContentImage: View {
     var event: Event
     
     var body: some View {

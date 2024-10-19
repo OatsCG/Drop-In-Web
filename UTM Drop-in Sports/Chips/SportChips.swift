@@ -92,6 +92,7 @@ struct SportChips: View {
             }
         }
     }
+    
     func changeExpansion() {
         if maxRows == 3 {
             withAnimation {

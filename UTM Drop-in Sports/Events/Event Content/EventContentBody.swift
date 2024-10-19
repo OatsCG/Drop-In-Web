@@ -1,5 +1,5 @@
 //
-//  EventBody.swift
+//  EventContentBody.swift
 //  UTM Drop-in Sports
 //
 //  Created by Charlie Giannis on 2024-09-08.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EventBody: View {
+struct EventContentBody: View {
     @EnvironmentObject var categoryParser: CategoryParser
     var event: Event
     
