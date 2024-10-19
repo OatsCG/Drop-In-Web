@@ -14,6 +14,7 @@ struct SportChips: View {
     @State var maxRows: Int = 3
     @State var isExpanded: Bool = false
     @State var maxWidth: CGFloat = 300
+    
     var body: some View {
         ZStack {
             VStack {
@@ -41,22 +42,22 @@ struct SportChips: View {
                                 if colorScheme == .dark {
                                     if categoryParser.onlyWomens {
                                         RoundedRectangle(cornerRadius: 8)
-                                            .strokeBorder(.blueUTMlight, lineWidth: 2)
-                                            .background(RoundedRectangle(cornerRadius: 8).fill(.blueUTMlight.gradient))
+                                            .fill(.blueUTMlight.gradient)
+                                            .stroke(.blueUTMlight, lineWidth: 2)
                                     } else {
                                         RoundedRectangle(cornerRadius: 8)
-                                            .strokeBorder(.blueUTMlight, lineWidth: 1)
-                                            .background(RoundedRectangle(cornerRadius: 8).fill(.white.opacity(0.05)))
+                                            .fill(.white.opacity(0.05))
+                                            .stroke(.blueUTMlight, lineWidth: 1)
                                     }
                                 } else {
                                     if categoryParser.onlyWomens {
                                         RoundedRectangle(cornerRadius: 8)
-                                            .strokeBorder(.blueUTMlight, lineWidth: 2)
-                                            .background(RoundedRectangle(cornerRadius: 8).fill(.blueUTMlight.gradient))
+                                            .fill(.blueUTMlight.gradient)
+                                            .stroke(.blueUTMlight, lineWidth: 2)
                                     } else {
                                         RoundedRectangle(cornerRadius: 8)
-                                            .strokeBorder(.blueUTMlight, lineWidth: 2)
-                                            .background(RoundedRectangle(cornerRadius: 8).fill(.white))
+                                            .fill(.white)
+                                            .stroke(.blueUTMlight, lineWidth: 2)
                                     }
                                 }
                             }
@@ -67,17 +68,7 @@ struct SportChips: View {
                 }
                 HStack {
                     Button(action: {
-                        if maxRows == 3 {
-                            withAnimation {
-                                maxRows = .max
-                                isExpanded = true
-                            }
-                        } else {
-                            withAnimation {
-                                maxRows = 3
-                                isExpanded = false
-                            }
-                        }
+                        changeExpansion()
                     }) {
                         HStack {
                             if isExpanded {
@@ -88,7 +79,7 @@ struct SportChips: View {
                                     Image(systemName: category.symbol)
                                         .foregroundStyle(.blueUTM)
                                 }
-                                if (categoryParser.onlyWomens) {
+                                if categoryParser.onlyWomens {
                                     Image("figure.stand.dress")
                                         .foregroundStyle(.blueUTM)
                                 }
@@ -101,9 +92,17 @@ struct SportChips: View {
             }
         }
     }
-}
-
-
-#Preview {
-    ContentView()
+    func changeExpansion() {
+        if maxRows == 3 {
+            withAnimation {
+                maxRows = .max
+                isExpanded = true
+            }
+        } else {
+            withAnimation {
+                maxRows = 3
+                isExpanded = false
+            }
+        }
+    }
 }

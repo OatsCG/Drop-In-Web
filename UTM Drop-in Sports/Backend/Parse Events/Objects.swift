@@ -28,18 +28,15 @@ struct DayEvents: Hashable {
 class AllEvents {
     var days: [DayEvents] = []
     
-    
     init(events: [Event], maxDays: Int?) {
         var dayEventsList: [DayEvents] = []
-        
-        let calendar = Calendar.current
-        
         var currentDayEvents: DayEvents?
         
+        let calendar: Calendar = Calendar.current
         for event in events {
-            let eventDate = calendar.startOfDay(for: event.relativeTimeDate.startDate)
+            let eventDate: Date = calendar.startOfDay(for: event.relativeTimeDate.startDate)
             
-            if let currentDay = currentDayEvents?.date, currentDay == eventDate {
+            if let currentDay: Date = currentDayEvents?.date, currentDay == eventDate {
                 currentDayEvents?.events.append(event)
             } else {
                 if let currentDayEvents = currentDayEvents {

@@ -9,21 +9,15 @@ import SwiftUI
 
 class CategoryParser: ObservableObject {
     private var allEvents: [Event] = []
-    
     @Published var categories: [Category] = []
-    
     @Published var events: [Event] = []
     @Published var groupedEvents: AllEvents = AllEvents(events: [], maxDays: nil)
-    
     @Published var isUpdating: Bool = true
     @Published var onlyWomens: Bool = false
-    
     @Published var isEventsExpandedToMax: Bool = false
-    
     var searchField: String = ""
     var lastUpdated: Date? = nil
     private var isUpdatingPrivate: Bool = false
-    
     private var timer: DispatchSourceTimer?
     
     init() {
@@ -61,26 +55,16 @@ class CategoryParser: ObservableObject {
     }
     
     func startTimerLoop() {
-            // Cancel any existing timer
-            timer?.cancel()
-
-            // Create a new timer
-            timer = DispatchSource.makeTimerSource()
-            timer?.schedule(deadline: .now(), repeating: 5.0)
-
-            timer?.setEventHandler { [weak self] in
-                self?.tryRefreshContent()
-            }
-
-            // Start the timer
-            timer?.resume()
+        timer?.cancel()
+    
+        timer = DispatchSource.makeTimerSource()
+        timer?.schedule(deadline: .now(), repeating: 5.0)
+        timer?.setEventHandler { [weak self] in
+            self?.tryRefreshContent()
         }
-
-        func stopTimerLoop() {
-            // Cancel the timer when stopping
-            timer?.cancel()
-            timer = nil
-        }
+    
+        timer?.resume()
+    }
     
     func areDatesWithinTenMinutes(_ date1: Date, _ date2: Date) -> Bool {
         let timeInterval = abs(date1.timeIntervalSince(date2))
@@ -120,9 +104,9 @@ class CategoryParser: ObservableObject {
             
             // Compare with stored version
             if storedVersion == fetchedVersion {
-                // Versions match, do nothing and return
                 return
             }
+            
             // Fetch events.json content from the remote server
             let (eventsData, _) = try await URLSession.shared.data(from: eventsURL)
             
@@ -154,11 +138,9 @@ class CategoryParser: ObservableObject {
                 event.description.lowercased().contains(self.searchField.lowercased()) ||
                 event.venue.lowercased().contains(self.searchField.lowercased()) ||
                 self.searchField == "" {
-                
                 searchedEvents.append(event)
             }
         }
-        
         
         var selectedCategories: [Category] = []
         for category in self.categories {

@@ -10,6 +10,7 @@ import SwiftUI
 struct EventBody: View {
     @EnvironmentObject var categoryParser: CategoryParser
     var event: Event
+    
     var body: some View {
         Text(event.description)
             .padding(.bottom, 10)
@@ -26,33 +27,5 @@ struct EventBody: View {
                 }
             }
         }
-    }
-}
-
-#Preview {
-    VStack {
-        HStack {
-            Text("Save This Event")
-            Image(systemName: "bookmark")
-        }
-            .foregroundStyle(.black)
-            .padding(.vertical, 6)
-            .padding(.horizontal, 12)
-            .background(.blueUTMlight)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-        VStack(alignment: .center) {
-            HStack {
-                Text("Event Saved")
-                Image(systemName: "bookmark.fill")
-            }
-            Text("We'll notify you 30 minutes before it starts")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-        }
-            .foregroundStyle(.white)
-            .padding(.vertical, 6)
-            .padding(.horizontal, 12)
-            .background(.blueUTMdark)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }

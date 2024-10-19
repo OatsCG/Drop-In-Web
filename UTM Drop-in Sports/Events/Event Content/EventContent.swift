@@ -10,6 +10,7 @@ import SwiftUI
 struct EventContent: View {
     @Binding var showingSheet: Bool
     @Binding var event: Event
+    
     var body: some View {
         VStack {
             Button(action: {

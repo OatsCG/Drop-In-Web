@@ -9,7 +9,6 @@ import SwiftUI
 
 struct EventImage: View {
     var event: Event
-    // if image exists, height is always 674px
     
     var body: some View {
         if let img = URL(string: event.image) {
@@ -33,22 +32,5 @@ struct EventImage: View {
             .aspectRatio(1494/674, contentMode: .fit)
             .ignoresSafeArea()
         }
-    }
-}
-
-
-#Preview {
-    VStack {
-        Text("1")
-        HStack {
-            Text("3")
-            Color.clear
-                .overlay {
-                    ProgressView()
-                }
-                .aspectRatio(1494/674, contentMode: .fit)
-            Text("4")
-        }
-        Text("2")
     }
 }

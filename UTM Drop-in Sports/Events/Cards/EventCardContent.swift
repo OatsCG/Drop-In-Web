@@ -9,6 +9,7 @@ import SwiftUI
 
 struct EventCardContent: View {
     @Binding var event: Event
+    
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .center) {
@@ -70,17 +71,9 @@ struct EventCardContent: View {
         }
         .padding(15)
         .background {
-            RoundedRectangle(cornerSize: .init(width: 15, height: 15), style: .continuous)
+            RoundedRectangle(cornerRadius: 15)
                 .fill(.white.opacity(0.05))
                 .stroke(.tertiary, lineWidth: 2)
         }
-        .contentShape(RoundedRectangle(cornerSize: .init(width: 15, height: 15), style: .continuous))
-        .clipShape(RoundedRectangle(cornerSize: .init(width: 15, height: 15), style: .continuous))
     }
 }
-
-//#Preview {
-//    @State var c = CategoryParser()
-//    return ContentView()
-//        .environmentObject(c)
-//}

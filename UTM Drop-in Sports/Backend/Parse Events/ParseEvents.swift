@@ -8,14 +8,13 @@
 import SwiftUI
 
 func loadEventJSON() -> EventJSON? {
-    let fileManager = FileManager.default
+    let fileManager: FileManager = FileManager.default
     if let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first {
-        let eventsFileURL = documentsDirectory.appendingPathComponent("events.json")
-        
+        let eventsFileURL: URL = documentsDirectory.appendingPathComponent("events.json")
         do {
-            let data = try Data(contentsOf: eventsFileURL)
-            let decoder = JSONDecoder()
-            let eventJSON = try decoder.decode(EventJSON.self, from: data)
+            let data: Data = try Data(contentsOf: eventsFileURL)
+            let decoder: JSONDecoder = JSONDecoder()
+            let eventJSON: EventJSON = try decoder.decode(EventJSON.self, from: data)
             return eventJSON
         } catch {
             print("Error loading or decoding events.json: \(error)")
@@ -24,20 +23,17 @@ func loadEventJSON() -> EventJSON? {
     return nil
 }
 
-
 class EventJSON: Decodable {
     let categories: [Category]
     let events: [Event]
 }
 
-
 class Category: Decodable, Hashable, ObservableObject {
-    static func == (lhs: Category, rhs: Category) -> Bool {
-        return lhs.id == rhs.id
-    }
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(self.id)
-    }
+    var id: UUID = UUID()
+    let title: String
+    let symbol: String
+    @Published var selected: Bool = false
+    @Published var shown: Bool = false
     
     required init(from decoder:Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
@@ -50,23 +46,32 @@ class Category: Decodable, Hashable, ObservableObject {
         case symbol
     }
     
-    var id: UUID = UUID()
-    let title: String
-    let symbol: String
-    @Published var selected: Bool = false
-    @Published var shown: Bool = false
-}
-
-
-class Event: Decodable, Hashable {
-    static func == (lhs: Event, rhs: Event) -> Bool {
+    static func == (lhs: Category, rhs: Category) -> Bool {
         return lhs.id == rhs.id
     }
     func hash(into hasher: inout Hasher) {
         hasher.combine(self.id)
     }
+}
+
+
+class Event: Decodable, Hashable {
+    var relativeTimeDate: RelativeTimeDate
+    var id: Int
+    let url: String
+    let title: String
+    let description: String
+    let image: String
+    let start_date: String
+    let end_date: String
+    let venue: String
+    let ticket_label: String
+    let ticket_url: String
+    let sortCategory: String
+    let symbol: String
+    let womens: Bool
     
-    required init(from decoder:Decoder) throws {
+    required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = try values.decode(Int.self, forKey: .id)
         url = try values.decode(String.self, forKey: .url)
@@ -99,25 +104,14 @@ class Event: Decodable, Hashable {
         case symbol
         case womens
     }
-  
-    var relativeTimeDate: RelativeTimeDate
-    var id: Int
-    let url: String
-    let title: String
-    let description: String
-    let image: String
-    let start_date: String
-    let end_date: String
-    let venue: String
-    let ticket_label: String
-    let ticket_url: String
-    let sortCategory: String
-    let symbol: String
-    let womens: Bool
+    
+    static func ==(lhs: Event, rhs: Event) -> Bool {
+        return lhs.id == rhs.id
+    }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(self.id)
+    }
 }
-
-
-import Foundation
 
 struct RelativeTimeDate {
     let startDate: Date
@@ -132,30 +126,29 @@ struct RelativeTimeDate {
 }
 
 func formatDateRange(startDate: String, endDate: String) -> RelativeTimeDate {
-    let dateFormatter = DateFormatter()
+    let dateFormatter: DateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
     
-    guard let start = dateFormatter.date(from: startDate),
-          let end = dateFormatter.date(from: endDate) else {
+    guard let start: Date = dateFormatter.date(from: startDate),
+          let end: Date = dateFormatter.date(from: endDate) else {
         return RelativeTimeDate(startDate: Date(), timeString: "", dateString: "", daysLeftString: "", timeLeftString: "", isOngoing: false, isEventOver: false, daySymbol: "", daySymbolColor: .primary)
     }
     
-    let now = Date()
     // Time String (e.g., "9:00am - 10:00am")
-    let timeFormatter = DateFormatter()
+    let timeFormatter: DateFormatter = DateFormatter()
     timeFormatter.dateFormat = "h:mma"
-    let startTime = timeFormatter.string(from: start).lowercased()
-    let endTime = timeFormatter.string(from: end).lowercased()
-    let timeString = "\(startTime) - \(endTime)"
+    let startTime: String = timeFormatter.string(from: start).lowercased()
+    let endTime: String = timeFormatter.string(from: end).lowercased()
+    let timeString: String = "\(startTime) - \(endTime)"
     
     // Date String (e.g., "Tuesday Sept 2")
-    let dateFormatterForDateString = DateFormatter()
+    let dateFormatterForDateString: DateFormatter = DateFormatter()
     dateFormatterForDateString.dateFormat = "EEEE MMM d"
-    let dateString = dateFormatterForDateString.string(from: start)
+    let dateString: String = dateFormatterForDateString.string(from: start)
     
     // Days Left String (e.g., "Today", "Tomorrow", "")
-    let calendar = Calendar.current
-    let daysLeftString: String
+    let calendar: Calendar = Calendar.current
+    let now: Date = Date()
     let hoursLeft: Int = Int(round(start.timeIntervalSince(now) / 3600))
     var timeLeftString: String = ""
     if hoursLeft >= 0 {
@@ -166,8 +159,7 @@ func formatDateRange(startDate: String, endDate: String) -> RelativeTimeDate {
         }
     }
     
-    //let timeLeftString = hoursLeft <= 5 ? "\(hoursLeft) \(hoursLeft == 1 ? "hour" : "hours") left" : ""
-    
+    let daysLeftString: String
     if calendar.isDateInToday(start) {
         daysLeftString = "Today"
     } else if calendar.isDateInTomorrow(start) {
@@ -177,19 +169,19 @@ func formatDateRange(startDate: String, endDate: String) -> RelativeTimeDate {
     }
     
     // isOngoing
-    let isOngoing = now >= start && now <= end
+    let isOngoing: Bool = now >= start && now <= end
     
     // isEventOver
-    let isEventOver = now > end
+    let isEventOver: Bool = now > end
     
     return RelativeTimeDate(startDate: start, timeString: timeString, dateString: dateString, daysLeftString: daysLeftString, timeLeftString: timeLeftString, isOngoing: isOngoing, isEventOver: isEventOver, daySymbol: getDaySection(start, end), daySymbolColor: getDayColor(start, end))
 }
 
 func getDaySection(_ startDate: Date, _ endDate: Date) -> String {
-    let middleDate = startDate.addingTimeInterval(endDate.timeIntervalSince(startDate) / 2)
+    let calendar: Calendar = Calendar.current
     
-    let calendar = Calendar.current
-    let hour = calendar.component(.hour, from: middleDate)
+    let middleDate: Date = startDate.addingTimeInterval(endDate.timeIntervalSince(startDate) / 2)
+    let hour: Int = calendar.component(.hour, from: middleDate)
 
     switch hour {
     case 6..<12:
@@ -202,10 +194,10 @@ func getDaySection(_ startDate: Date, _ endDate: Date) -> String {
 }
 
 func getDayColor(_ startDate: Date, _ endDate: Date) -> Color {
-    let middleDate = startDate.addingTimeInterval(endDate.timeIntervalSince(startDate) / 2)
+    let calendar: Calendar = Calendar.current
     
-    let calendar = Calendar.current
-    let hour = calendar.component(.hour, from: middleDate)
+    let middleDate: Date = startDate.addingTimeInterval(endDate.timeIntervalSince(startDate) / 2)
+    let hour: Int = calendar.component(.hour, from: middleDate)
 
     switch hour {
     case 6..<12:
@@ -217,8 +209,3 @@ func getDayColor(_ startDate: Date, _ endDate: Date) -> Color {
     }
 }
 
-
-
-#Preview {
-    ContentView()
-}

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct EventHeader: View {
     var event: Event
+    
     var body: some View {
         HStack(alignment: .center) {
             Image(systemName: event.symbol)
@@ -82,8 +83,4 @@ struct EventHeader: View {
         }
         .padding(.leading, 10)
     }
-}
-
-#Preview {
-    ContentView()
 }

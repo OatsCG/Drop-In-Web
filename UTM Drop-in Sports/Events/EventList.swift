@@ -9,6 +9,7 @@ import SwiftUI
 
 struct EventList: View {
     @EnvironmentObject var categoryParser: CategoryParser
+    
     var body: some View {
         if categoryParser.events.isEmpty {
             VStack {
@@ -36,6 +37,7 @@ struct EventList: View {
 struct EventDaySection: View {
     @Binding var day: DayEvents
     @State var isExpanded: Bool = true
+    
     var body: some View {
         Section(isExpanded: $isExpanded) {
             ForEach($day.events, id: \.id) { $event in
@@ -51,6 +53,7 @@ struct EventDaySection: View {
 struct EventDayHeader: View {
     @Binding var isExpanded: Bool
     var day: DayEvents
+    
     var body: some View {
         VStack {
             VStack {
@@ -84,11 +87,7 @@ struct EventDayHeader: View {
             .padding(.vertical, 10)
         }
         .background {
-            Group {
-                Rectangle()
-                    .strokeBorder(.quinary, lineWidth: 1)
-            }
-                .background(Rectangle().fill(.background))
+            Rectangle().fill(.background)
                 .ignoresSafeArea()
                 .shadow(color: .black.opacity(0.05), radius: 5, y: -5)
         }
@@ -96,13 +95,13 @@ struct EventDayHeader: View {
 }
 
 func relativeDateString(_ date: Date) -> String {
-    let calendar = Calendar.current
-    let today = calendar.startOfDay(for: Date())
-    let targetDate = calendar.startOfDay(for: date)
+    let calendar: Calendar = Calendar.current
+    let today: Date = calendar.startOfDay(for: Date())
+    let targetDate: Date = calendar.startOfDay(for: date)
     
     if calendar.isDate(today, inSameDayAs: targetDate) {
         return "Today"
-    } else if let tomorrow = calendar.date(byAdding: .day, value: 1, to: today), calendar.isDate(tomorrow, inSameDayAs: targetDate) {
+    } else if let tomorrow: Date = calendar.date(byAdding: .day, value: 1, to: today), calendar.isDate(tomorrow, inSameDayAs: targetDate) {
         return "Tomorrow"
     } else {
         let dateFormatter = DateFormatter()
@@ -112,11 +111,11 @@ func relativeDateString(_ date: Date) -> String {
 }
 
 func relativeDaysUntilString(_ date: Date) -> String {
-    let calendar = Calendar.current
-    let today = calendar.startOfDay(for: Date())
-    let targetDate = calendar.startOfDay(for: date)
+    let calendar: Calendar = Calendar.current
+    let today: Date = calendar.startOfDay(for: Date())
+    let targetDate: Date = calendar.startOfDay(for: date)
     
-    guard let daysDifference = calendar.dateComponents([.day], from: today, to: targetDate).day else {
+    guard let daysDifference: Int = calendar.dateComponents([.day], from: today, to: targetDate).day else {
         return ""
     }
     
@@ -127,7 +126,3 @@ func relativeDaysUntilString(_ date: Date) -> String {
     }
 }
 
-
-//#Preview {
-//    ContentView()
-//}

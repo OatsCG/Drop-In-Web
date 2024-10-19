@@ -10,7 +10,9 @@ import SwiftUI
 struct EventCard: View {
     @Binding var event: Event
     @State var showingSheet: Bool = false
+    
     @Namespace var animation
+    
     var body: some View {
         Button(action: {
             showingSheet = true
@@ -24,10 +26,4 @@ struct EventCard: View {
                 .navigationTransition(.zoom(sourceID: event.id, in: animation))
         }
     }
-}
-
-#Preview {
-    @Previewable @State var c = CategoryParser()
-    return ContentView()
-        .environmentObject(c)
 }

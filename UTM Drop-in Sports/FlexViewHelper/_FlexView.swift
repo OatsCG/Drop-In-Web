@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct _FlexView<Data: Collection & Equatable, Content: View>: View where Data.Element: Hashable {
-    
     @Binding var availableWidth: CGFloat
     @Binding var data: Data
     let spacing: CGFloat

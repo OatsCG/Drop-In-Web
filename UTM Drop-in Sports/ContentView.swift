@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
-    @Environment(\.scenePhase) var scenePhase
     @EnvironmentObject var categoryParser: CategoryParser
     @State var searchField: String = ""
     @State var showNetworkAlert: Bool = false
+    
     var body: some View {
         Group {
             MainNavigationView(showNetworkAlert: $showNetworkAlert)
@@ -37,8 +37,8 @@ struct ContentView: View {
 }
 
 struct MainNavigationView: View {
-    @State var path: NavigationPath = NavigationPath()
     @Binding var showNetworkAlert: Bool
+    @State var path: NavigationPath = NavigationPath()
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -51,9 +51,9 @@ struct MainNavigationView: View {
 
 
 struct MainScrollView: View {
-    @AppStorage("isTipVisible") var isTipVisible: Bool = true
     @EnvironmentObject var categoryParser: CategoryParser
     @Binding var showNetworkAlert: Bool
+    
     var body: some View {
         ScrollView {
             MainScrollContentView(showNetworkAlert: $showNetworkAlert)
@@ -64,6 +64,7 @@ struct MainScrollView: View {
 struct MainScrollContentView: View {
     @EnvironmentObject var categoryParser: CategoryParser
     @Binding var showNetworkAlert: Bool
+    
     var body: some View {
         if categoryParser.isUpdating {
             VStack {
@@ -97,6 +98,7 @@ struct MainScrollContentView: View {
 
 struct LoadMoreEventsButton: View {
     @EnvironmentObject var categoryParser: CategoryParser
+    
     var body: some View {
         HStack {
             if !categoryParser.isEventsExpandedToMax && categoryParser.events.count > 0 && categoryParser.groupedEvents.days.count == 14 {
@@ -115,5 +117,3 @@ struct LoadMoreEventsButton: View {
         }
     }
 }
-
-
