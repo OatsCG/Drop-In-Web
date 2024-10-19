@@ -11,7 +11,6 @@ struct SportChip: View {
     @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject var categoryParser: CategoryParser
     var category: Category
-    @State var favourited: Bool = false
     
     var body: some View {
         Button(action: {
@@ -25,10 +24,6 @@ struct SportChip: View {
                     .symbolEffect(.bounce, value: category.selected)
                 Text(category.title)
                     .fixedSize(horizontal: false, vertical: true)
-                if favourited {
-                    Image(systemName: "star.fill")
-                        .foregroundStyle(.yellow)
-                }
             }
                 .foregroundStyle(category.selected ? .white : (colorScheme == .dark ? .white : .black))
                 .padding(.horizontal, 14)

@@ -13,22 +13,7 @@ struct MainScrollContentView: View {
     
     var body: some View {
         if categoryParser.isUpdating {
-            VStack {
-                Spacer()
-                HStack {
-                    Spacer()
-                    VStack {
-                        ProgressView()
-                        if showNetworkAlert {
-                            Text("Check your network connection to update the schedule.")
-                                .multilineTextAlignment(.center)
-                                .font(.caption2)
-                        }
-                    }
-                    Spacer()
-                }
-                Spacer()
-            }
+            MainScrollLoading(showNetworkAlert: $showNetworkAlert)
         } else {
             VStack {
                 SportChips()

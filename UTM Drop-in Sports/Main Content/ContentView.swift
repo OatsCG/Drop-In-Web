@@ -22,13 +22,17 @@ struct ContentView: View {
             categoryParser.updateDisplayEvents(maxDays: 14)
         }
         .onAppear {
-            Task {
-                try? await Task.sleep(for: .seconds(5))
-                await MainActor.run {
-                    if (categoryParser.isUpdating) {
-                        withAnimation {
-                            showNetworkAlert = true
-                        }
+            tryWarningNetworkAlert()
+        }
+    }
+    
+    func tryWarningNetworkAlert() {
+        Task {
+            try? await Task.sleep(for: .seconds(5))
+            await MainActor.run {
+                if (categoryParser.isUpdating) {
+                    withAnimation {
+                        showNetworkAlert = true
                     }
                 }
             }
