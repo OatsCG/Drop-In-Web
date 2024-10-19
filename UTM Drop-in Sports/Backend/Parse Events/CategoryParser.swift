@@ -23,8 +23,6 @@ class CategoryParser: ObservableObject {
     
     @Published var isEventsExpandedToMax: Bool = false
     
-    @Published var medalsCollected: [Medal] = []
-    
     var searchField: String = ""
     var lastUpdated: Date? = nil
     private var isUpdatingPrivate: Bool = false
@@ -63,7 +61,6 @@ class CategoryParser: ObservableObject {
                     self.lastUpdated = Date()
                     self.updateSavedEvents()
                     self.updateDisplayEvents(maxDays: 14)
-                    self.updateMedalsCollected()
                     self.isUpdatingPrivate = false
                     self.startTimerLoop()
                 }
@@ -89,7 +86,6 @@ class CategoryParser: ObservableObject {
             self.lastUpdated = Date()
             self.updateSavedEvents()
             self.updateDisplayEvents(maxDays: 14)
-            self.updateMedalsCollected()
             self.isUpdatingPrivate = false
         }
     }
@@ -274,50 +270,6 @@ class CategoryParser: ObservableObject {
             self.savedEvents = matchingEvents
             self.savedOngoingEvents = matchingEvents.filter { $0.relativeTimeDate.isOngoing || $0.relativeTimeDate.isEventOver }
         }
-//        print("update saved: \(self.savedEvents)")
-    }
-    
-    func addMedal(event: Event) {
-        // add Medal struct to UserDefaults
-        let medal: CompletedEvent = CompletedEvent(id: event.id, sport: event.title, category: event.sortCategory, icon: event.symbol, date: event.relativeTimeDate.startDate)
-        let medalString: String = UserDefaults.standard.string(forKey: "Medals") ?? ""
-        var splitMedalString: [String] = medalString.components(separatedBy: "<SEP>")
-        let thisMedal: String = medal.toString()
-        if splitMedalString.contains(thisMedal) { return }
-        splitMedalString.append(medal.toString())
-        let joinedMedalString: String = splitMedalString.joined(separator: "<SEP>")
-        UserDefaults.standard.set(joinedMedalString, forKey: "Medals")
-        self.updateMedalsCollected()
-    }
-    
-    func updateMedalsCollected() {
-        Task.detached {
-            let medalsFetched = UserDefaults.standard.string(forKey: "Medals") ?? ""
-            let splitMedals: [String] = medalsFetched.components(separatedBy: "<SEP>")
-            var completedEvents: [CompletedEvent] = []
-            splitMedals.forEach { medalString in
-                let completedEvent: CompletedEvent? = try? CompletedEvent(from: medalString)
-                if let completedEvent = completedEvent {
-                    // dismiss if completedEvents doesnt contain completedEvent.id
-                    if !completedEvents.contains(where: { $0.id == completedEvent.id }) {
-                        completedEvents.append(completedEvent)
-                    }
-                }
-            }
-            // add all medals
-            var medals: [Medal] = []
-            for i in self.categories {
-                medals.append(Medal(category: i.title, icon: i.symbol, possibleEvents: completedEvents))
-            }
-            DispatchQueue.main.async {
-                self.medalsCollected = medals
-            }
-        }
-    }
-    
-    func clearAllMedals() {
-        UserDefaults.standard.set("", forKey: "Medals")
-        self.updateMedalsCollected()
     }
 }
 

@@ -156,16 +156,6 @@ struct EventCardContentActive: View {
     @State var didAccept: Bool = false
     var body: some View {
         EventCardContentActiveBody(event: $event, showingMedalAcceptance: $showingMedalAcceptance)
-            .sheet(isPresented: $showingMedalAcceptance) {
-                print("dismissed! didAccept: \(didAccept)")
-                if didAccept {
-                    categoryParser.unsaveEvent(event: event)
-                }
-            } content: {
-                if let $medal = $categoryParser.medalsCollected.first(where: { $0.category.wrappedValue == event.sortCategory }) {
-                    MedalAcceptanceSheet(event: $event, showingMedalAcceptance: $showingMedalAcceptance, medal: $medal, didAccept: $didAccept)
-                }
-            }
     }
 }
 
@@ -392,9 +382,7 @@ struct EventCardContentActiveBody: View {
 
 @available(iOS 17.0, *)
 #Preview {
-    @Previewable @State var nm = NotificationManager()
     @Previewable @State var c = CategoryParser()
     return ContentView()
         .environmentObject(c)
-        .environmentObject(nm)
 }

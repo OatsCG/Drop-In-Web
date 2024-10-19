@@ -9,7 +9,6 @@ import SwiftUI
 
 struct EventBody: View {
     @EnvironmentObject var categoryParser: CategoryParser
-    @EnvironmentObject var notificationManager: NotificationManager
     var event: Event
     var body: some View {
         Text(event.description)
@@ -18,22 +17,15 @@ struct EventBody: View {
         if event.saved {
             Button(action: {
                 categoryParser.unsaveEvent(event: event)
-                notificationManager.cancelNotification(event: event)
             }) {
                 VStack(alignment: .center) {
                     HStack {
                         Text("Event Saved")
                         Image(systemName: "bookmark.fill")
                     }
-                    if notificationManager.currentlyScheduledEvents.contains(event.id) {
-                        Text("We'll notify you 30 minutes before it starts")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                    } else {
-                        Text("Have Fun!")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                    }
+                    Text("Have Fun!")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
                 }
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
@@ -46,7 +38,6 @@ struct EventBody: View {
         } else {
             Button(action: {
                 categoryParser.saveEvent(event: event)
-                notificationManager.scheduleNotification(event: event)
             }) {
                 HStack {
                     Text("Save This Event")

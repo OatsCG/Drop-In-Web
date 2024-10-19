@@ -11,7 +11,6 @@ import AppIntents
 struct ContentView: View {
     @Environment(\.scenePhase) var scenePhase
     @EnvironmentObject var categoryParser: CategoryParser
-    @EnvironmentObject var notificationManager: NotificationManager
     @State var searchField: String = ""
     @State var showNetworkAlert: Bool = false
     var body: some View {
@@ -26,16 +25,6 @@ struct ContentView: View {
         .onChange(of: searchField) { _ in
             categoryParser.searchField = searchField
             categoryParser.updateDisplayEvents(maxDays: 14)
-        }
-        .onChange(of: scenePhase) { newPhase in
-            if newPhase == .active {
-                print("Active")
-                notificationManager.clearNotificationBadges()
-            } else if newPhase == .inactive {
-                print("Inactive")
-            } else if newPhase == .background {
-                print("Background")
-            }
         }
         .onAppear {
             Task {
@@ -67,93 +56,11 @@ struct MainNavigationView: View {
                 MainScrollView(showNetworkAlert: $showNetworkAlert)
                     .navigationTitle(Text("UTM Drop-Ins"))
                     .safeAreaPadding(.horizontal)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            NavigationLink(destination: DisplayCase()) {
-                                Image(.medal)
-                                    .foregroundColor(.primary)
-                            }
-                        }
-                    }
             } else {
                 MainScrollView(showNetworkAlert: $showNetworkAlert)
                     .navigationTitle(Text("UTM Drop-Ins"))
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            NavigationLink(destination: DisplayCase()) {
-                                Image(.medal)
-                                    .foregroundColor(.primary)
-                            }
-                        }
-                    }
             }
         }
-    }
-}
-
-struct DisplayCase: View {
-    @State var maxRows: Int = .max
-    @State var size: CGFloat = 110
-    @State var showingClearAlert: Bool = false
-    @State var showingClearConfirmAlert: Bool = false
-    @EnvironmentObject var categoryParser: CategoryParser
-    var body: some View {
-        ScrollView {
-            if categoryParser.medalsCollected.isEmpty {
-                VStack {
-                    Image(systemName: "flag.2.crossed")
-                        .foregroundStyle(.secondary)
-                        .imageScale(.large)
-                        .font(.largeTitle)
-                    Text("No medals collected.")
-                        .font(.title2 .bold())
-                    Text("Save events and participate to earn medals.")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-            } else {
-                FlexView(data: $categoryParser.medalsCollected, spacing: 10, alignment: .center, maxRows: $maxRows) { medal in
-                    Group {
-                        if medal.type == .none {
-                            SportMedallionEmptyDisplay(size: $size, medal: medal)
-                        } else {
-                            SportMedallionDisplay(size: $size, medal: medal)
-                        }
-                    }
-                    .padding(.bottom, 10)
-                }
-                Text("Participate in events to earn more medals!")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .padding(.top, 15)
-            }
-        }
-        .navigationTitle("Medals")
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {
-                    showingClearAlert = true
-                }) {
-                    Image(systemName: "minus.circle")
-                        .foregroundColor(.red)
-                }
-            }
-        }
-        .alert("Remove all medals?", isPresented: $showingClearAlert) {
-            Button("Delete...", role: .destructive) {
-                showingClearConfirmAlert = true
-            }
-            Button("Cancel", role: .cancel) {  }
-        } message: {
-            Text("This will clear all your progress. This cannot be undone.")
-        }
-        .alert("Are you sure you want to remove all progress?", isPresented: $showingClearConfirmAlert) {
-            Button("Yes, Delete", role: .destructive) {
-                categoryParser.clearAllMedals()
-            }
-            Button("No, Cancel", role: .cancel) {  }
-        }
-
     }
 }
 
@@ -165,14 +72,6 @@ struct MainNavigationViewLegacy: View {
         NavigationView {
             MainScrollView(showNetworkAlert: $showNetworkAlert)
                 .navigationTitle(Text("UTM Drop-Ins"))
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        NavigationLink(destination: DisplayCase()) {
-                            Image(.medal)
-                                .foregroundColor(.primary)
-                        }
-                    }
-                }
         }
         .navigationViewStyle(.stack)
     }
@@ -185,10 +84,6 @@ struct MainScrollView: View {
     @Binding var showNetworkAlert: Bool
     var body: some View {
         ScrollView {
-            if #available(iOS 16.0, *) {
-                SiriTipView(intent: GetNextSportInfo(), isVisible: $isTipVisible)
-                    .siriTipViewStyle(.automatic)
-            }
             if #available(iOS 17.0, *) {
                 MainScrollContentView(showNetworkAlert: $showNetworkAlert)
             } else {
